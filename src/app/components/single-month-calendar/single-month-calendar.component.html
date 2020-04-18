@@ -1,0 +1,39 @@
+<div class="input-terminal">
+    <label for="month-input">Select month & year:s</label>
+    <input type="month" #yearAndMonth id="month-input">
+    <input type="button" value="Get Custom Calendar" (click)="onGenerateCustomCalendar(yearAndMonth.value)">
+</div>
+
+<div class="calendar-wrapper">
+    <div class="calendar-header">{{calendarMeta.monthStr}}, {{calendarMeta.year}}</div>
+    <div class="calendar-console">
+        <div class="calendar-column"*ngFor = "let dayColumn of calendarMeta.dayColumns">
+            <div class="day-header" (click) = "onColumnSelect(dayColumn.calendarDayIndex)">
+                <div class="header-content">{{ dayColumn.calendarDayStr }}</div>
+            </div>
+            <div class="day-cell" *ngFor = "let cell of dayColumn.calendareCells">
+                <div
+                    [ngClass] = "{
+                        'cell-content': true,
+                        'dummy-cell': !cell.inScope,
+                        'disabled': cell.disabled,
+                        'selected': !cell.disabled && cell.selected
+                    }"
+                    [id] = "cell.id"
+                    (click) = "onCellSelect(cell.id)"
+                    >
+                        {{ cell.date > 0 ? cell.date : '' }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="calendar-controls">
+        <input type="button" value="select all" (click)="onSelectAll()">
+        <input type="button" value="deselect all" (click)="onDeSelectAll()">
+        <input type="button" value="submit"  (click)="onSubmit()">
+    </div>
+</div>
+
+<div *ngIf="showSelectedDates" class="quick-display">
+    <span class="date" *ngFor = "let date of selectedDates">{{date}}</span>
+</div>
